@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path(API_PREFIX, include("auths.urls")),
+    path(API_PREFIX, include("cards.urls")),
 ]
 
 if settings.DEBUG:
