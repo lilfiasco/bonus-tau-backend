@@ -1,3 +1,4 @@
+import logging
 from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action
@@ -8,8 +9,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import CustomUser
 from .serializers import MyTokenObtainPairSerializer, UserRegisterSerializer, UserMeSerializer
-
-from helpers.logger import log_exception
 
 
 class MyObtainTokenPairView(TokenObtainPairView):
@@ -42,7 +41,8 @@ class UserMeViewSet(
                 serializer = self.get_serializer(user)
                 return Response(serializer.data)
             except Exception as e:
-                log_exception(e, 'Error user me')
+                logging.exception('Error user me: %s', str(e))
+                return Response({'error': 'An error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response(status=status.HTTP_404_NOT_FOUND)
     
